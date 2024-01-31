@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="styles.css">
+  <!-- <script src="scripts.js"></script> -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@100&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://openlayers.org/en/v6.15.1/css/ol.css" type="text/css">
+</head>
+<body>
+  <header>
+    <nav class="nav">
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="gis.html">Route</a></li>
+          <li><a href="map.html">Gis</a></li>
+        </ul>
+      </nav>
+</header>
+
+
+
+
+  <div id="map" style="width: 100%; height: 100vh;"></div>
+  <button id="toggleSelectedFeature">Show Selected Feature</button>
+  <button id="clearPoints">Clear Points</button>
+  <div id="selectedFeatureInfo" style="display: none; margin-top: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9;">
+    <h4 style="margin-bottom: 10px; color: blue;">Selected Feature Information:</h4>
+    <table style="width: 100%; border-collapse: collapse;">
+      <tbody id="selectedFeatureTable"></tbody>
+    </table>
+  </div>
+
+  <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v6.15.1/build/ol.js"></script>
+  <script src="https://unpkg.com/@turf/turf@6.3.0/turf.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const selectedFeatureProperties = null;
+      let showSelectedFeature = true;
+      const vectorSource = new ol.source.Vector({
+        format: new ol.format.GeoJSON(),
+        url: 'http://localhost:8080/geoserver/nagpur_road_dataset/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=nagpur_road_dataset%3Anagpur_road&maxFeatures=40000&outputFormat=application%2Fjson',
+      });
+      const lineCoordinates = [];
+      const lineVectorSource = new ol.source.Vector({});
+      const userPointsSource = new ol.source.Vector({});
+
+      const select = new ol.interaction.Select({
+        style: new ol.style.Style({
+          stroke: new ol.style.Stroke({
+            color: 'red',
+            width: 3,
+          }),
+        }),
+      });
+
+      select.on('select', function(event) {
+        if (event.selected.length > 0) {
+          const selectedFeature = event.selected[0];
+          setSelectedFeatureProperties(selectedFeature.getProperties());
+        } else {
+          setSelectedFeatureProperties(null);
+        }
+      });
+
+      const vectorLayer = new ol.layer.Vector({
+        source: vectorSource,
+        style: new ol.style.Style({
+          stroke: new ol.style.Stroke({
+            color: 'blue',
+            width: 2,
+          }),
+        }),
+      });
+
+      const map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM(),
+          }),
+          vectorLayer,
+          new ol.layer.Vector({
+            source: lineVectorSource,
+            style: new ol.style.Style({
+              stroke: new ol.style.Stroke({
+                color: 'green',
+                width: 4,
+              }),
+            }),
+          }),
+          new ol.layer.Vector({
+            source: userPointsSource,
+            style: new ol.style.Style({
+              image: new ol.style.Circle({
+                radius: 6,
+                fill: new ol.style.Fill({ color: 'red' }),
+                stroke: new ol.style.Stroke({ color: 'black', width: 2 }),
+              }),
+            }),
+          }),
+        ],
+        view: new ol.View({
+          center: ol.proj.fromLonLat([79.0882, 21.1458]),
+          zoom: 13,
+        }),
+      });
+
+      map.addInteraction(select);
+
+      map.on('click', function(event) {
+        if (userPointsSource.getFeatures().length < 2) {
+          const coordinate = event.coordinate;
+          const pointFeature = new ol.Feature({
+            geometry: new ol.geom.Point(coordinate),
+          });
+          userPointsSource.addFeature(pointFeature);
+          lineCoordinates.push(coordinate);
+
+          if (lineCoordinates.length === 2) {
+            calculateBuffer();
+          }
+        }
+      });
+
+      function calculateBuffer() {
+        if (lineCoordinates.length === 2) {
+          const line = turf.lineString(lineCoordinates);
+          const bufferedLine = turf.buffer(line, 0.01, { units: 'kilometers' });
+
+          const feature = new ol.Feature({
+            geometry: new ol.geom.LineString(bufferedLine.geometry.coordinates[0]),
+          });
+
+          lineVectorSource.clear();
+          lineVectorSource.addFeature(feature);
+        }
+      }
+
+      function setSelectedFeatureProperties(properties) {
+        selectedFeatureProperties = properties;
+        updateSelectedFeatureInfo();
+      }
+
+      function updateSelectedFeatureInfo() {
+        const selectedFeatureInfo = document.getElementById('selectedFeatureInfo');
+        const selectedFeatureTable = document.getElementById('selectedFeatureTable');
+        selectedFeatureTable.innerHTML = '';
+
+        if (showSelectedFeature && selectedFeatureProperties) {
+          selectedFeatureInfo.style.display = 'block';
+
+          for (const [key, value] of Object.entries(selectedFeatureProperties)) {
+            const row = document.createElement('tr');
+            const keyCell = document.createElement('td');
+            const valueCell = document.createElement('td');
+            keyCell.style.padding = '5px';
+            keyCell.style.fontWeight = 'bold';
+            keyCell.style.verticalAlign = 'top';
+            keyCell.innerText = key;
+            valueCell.style.padding = '5px';
+            valueCell.style.verticalAlign = 'top';
+            valueCell.innerText = JSON.stringify(value);
+            row.appendChild(keyCell);
+            row.appendChild(valueCell);
+            selectedFeatureTable.appendChild(row);
+          }
+        } else {
+          selectedFeatureInfo.style.display = 'none';
+        }
+      }
+
+      document.getElementById('toggleSelectedFeature').addEventListener('click', function() {
+        showSelectedFeature = !showSelectedFeature;
+        updateSelectedFeatureInfo();
+        this.innerText = showSelectedFeature ? 'Hide Selected Feature' : 'Show Selected Feature';
+      });
+
+      document.getElementById('clearPoints').addEventListener('click', function() {
+        userPointsSource.clear();
+        lineVectorSource.clear();
+        lineCoordinates.length = 0;
+      });
+    });
+  </script>
+</body>
+</html>

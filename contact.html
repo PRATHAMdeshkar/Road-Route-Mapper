@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.png" type="png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@100&display=swap" rel="stylesheet">
+    <title>Contact Us - GIS Company</title>
+    <link rel="stylesheet" href="contact.css">
+     <link rel="stylesheet" href="styles.css">
+     <script>"script.js"</script>
+</head>
+<body>
+    <header>
+        <nav class="nav">
+            <ul class="nav-links">
+              <li><a href="index.html">Home</a></li>
+              <li><a href="about.html">About</a></li>
+              <li><a href="contact.html">Contact</a></li>
+              <li><a href="gis.html">Route</a></li>
+              <li><a href="map.html">Gis</a></li>
+            </ul>
+          </nav>
+    </header>
+    <div class="container">
+        <section class="contact-info">
+            <h2>Contact Information</h2>
+            <p>If you have any questions or need assistance, feel free to contact us using the information below:</p>
+            <ul>
+                <li><strong>Email:</strong> rahulalone201@gmail.com</li>
+                <li><strong>Phone:</strong> +91 9588483283</li>
+                <li><strong>Address:</strong> GIS Street, Nagpur, india</li>
+            </ul>
+        </section>
+        <section class="contact-form">
+            <h2>Contact Form</h2>
+            <form action="submit_form.php" method="post">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+        </section>
+    </div>
+    <footer>
+        &copy; 2023 Your GIS Company | All Rights Reserved
+    </footer>
+</body>
+</html>

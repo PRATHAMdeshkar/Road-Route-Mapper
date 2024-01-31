@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open layers</title>
+    <!-- <script src="gis.js"></script> -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="gis.css">
+    <link rel="icon" href="favicon.png" type="png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@100&display=swap" rel="stylesheet">
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
+<script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-map.js?key=5ljFu59x5sDigCHTNTx0kHutNI5HYroP"></script>
+<script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-routing.js?key=5ljFu59x5sDigCHTNTx0kHutNI5HYroP"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
+        <link rel="stylesheet" href="style.css">
+</head>
+<body style='border:0; margin: 0'>
+    <header>
+        <nav class="nav">
+            <ul class="nav-links">
+              <li><a href="index.html">Home</a></li>
+              <li><a href="about.html">About</a></li>
+              <li><a href="contact.html">Contact</a></li>
+              <li><a href="gis.html">Route</a></li>
+              <li><a href="map.html">Gis</a></li>
+            </ul>
+          </nav>
+    </header>
+
+
+    <div id='map'></div>
+    <div class="formBlock">
+        <form id="form">
+            <input type="text" name="start" class="input" id="start" placeholder="Choose Starting point" />
+            <input type="text" name="end" class="input" id="destination" placeholder="Choose Destination point" />
+            <button style="display:block ;" type="submit">Get Directions</button>
+        </form>
+    </div>
+
+
+    <script>
+
+// default map layer
+let map = L.map('map', {
+layers: MQ.mapLayer(),
+center: [21.0882, 79.1458],
+zoom: 12
+});
+
+
+function runDirection(start, end) {
+    
+    // recreating new map layer after removal
+    map = L.map('map', {
+        layers: MQ.mapLayer(),
+        center: [21.0882, 79.1458],
+        zoom: 12
+    });
+    
+    var dir = MQ.routing.directions();
+
+    dir.route({
+        locations: [
+            start,
+            end
+        ]
+    });
+
+
+    CustomRouteLayer = MQ.Routing.RouteLayer.extend({
+        createStartMarker: (location) => {
+            var custom_icon;
+            var marker;
+
+            custom_icon = L.icon({
+                iconUrl: 'img/red.png',
+                iconSize: [20, 29],
+                iconAnchor: [10, 29],
+                popupAnchor: [0, -29]
+            });
+
+            marker = L.marker(location.latLng, {icon: custom_icon}).addTo(map);
+
+            return marker;
+        },
+
+        createEndMarker: (location) => {
+            var custom_icon;
+            var marker;
+
+            custom_icon = L.icon({
+                iconUrl: 'img/blue.png',
+                iconSize: [20, 29],
+                iconAnchor: [10, 29],
+                popupAnchor: [0, -29]
+            });
+
+            marker = L.marker(location.latLng, {icon: custom_icon}).addTo(map);
+
+            return marker;
+        }
+    });
+    
+    map.addLayer(new CustomRouteLayer({
+        directions: dir,
+        fitBounds: true
+    })); 
+}
+
+
+function submitForm(event) {
+event.preventDefault();
+
+
+map.remove();
+
+
+start = document.getElementById("start").value;
+end = document.getElementById("destination").value;
+
+
+runDirection(start, end);
+
+
+document.getElementById("form").reset();
+}
+
+const form = document.getElementById('form');
+
+form.addEventListener('submit', submitForm);
+        </script>
+</body>
+</html>

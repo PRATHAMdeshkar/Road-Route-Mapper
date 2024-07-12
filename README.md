@@ -1,7 +1,14 @@
 # Road-Route-Mapper
 ### Project Report Submitted in Partial Fulfillment of the Requirement for the Award of the Degree of Bachelor of Technology in Artificial Intelligence
 #### By
-Prathmesh Deshkar, Tejas Chandrikapure, Prathmesh Vishwekar, Sahil Lande, Rahul Alone, Samiksha Gotmare
+
+**Prathmesh Deshkar**
+**Tejas Chandrikapure** 
+**Prathmesh Vishwekar**
+**Sahil Lande**
+**Rahul Alone** 
+**Samiksha Gotmare**
+
 
 #### Under the Guidance of
 Dr. Smita Nirkhi, Associate Professor, AI Dept.
@@ -27,8 +34,7 @@ The Road-Route Mapper project holds substantial promise for future expansion and
 
 ---
 
-## Chapter 1: Introduction
-### 1.1 Overview
+### Overview
 Geographic Information Systems (GIS) represent a transformative technology that revolutionizes how we understand and interact with our world. At its core, GIS leverages spatial data to create, analyze, visualize, and interpret geographical information. By combining various types of data, such as maps, satellite imagery, demographic statistics, and more, GIS enables us to answer complex questions and solve real-world problems with a geographical dimension. GIS is critical for urban planning, environmental monitoring, disaster management, logistics, and countless other applications, empowering users to make informed decisions, optimize resources, and gain valuable insights by focusing on location-based analysis.
 
 The "Road Route Mapper" project addresses the complex challenges of modern route planning by providing a comprehensive and innovative solution. This project streamlines the process of finding the most efficient path from point A to point B, emphasizing seamless integration of multiple technologies and a user-centric approach. The project begins with the use of Quantum Geographic Information System (QGIS) to create an extensive and accurate road layer, serving as the foundational data source. This road layer captures details on road networks, intersections, and various geographical attributes.

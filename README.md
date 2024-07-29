@@ -1,6 +1,6 @@
 # Road-Route-Mapper
 ### Project Report Submitted in Partial Fulfillment of the Requirement for the Award of the Degree of Bachelor of Technology in Artificial Intelligence
-#### Project By
+ **Project By**
 
 **Prathmesh Deshkar** <br>
 **Tejas Chandrikapure** <br>

@@ -1,18 +1,18 @@
 # Road-Route-Mapper
 ### Project Report Submitted in Partial Fulfillment of the Requirement for the Award of the Degree of Bachelor of Technology in Artificial Intelligence
-#### By
+#### Project By
 
-**Prathmesh Deshkar**
-**Tejas Chandrikapure** 
-**Prathmesh Vishwekar**
-**Sahil Lande**
-**Rahul Alone** 
-**Samiksha Gotmare**
+**Prathmesh Deshkar** <br>
+**Tejas Chandrikapure** <br>
+**Prathmesh Vishwekar** <br>
+**Sahil Lande** <br>
+**Rahul Alone**  <br>
+**Samiksha Gotmare** <br>
 
 
 #### Under the Guidance of
-Dr. Smita Nirkhi, Associate Professor, AI Dept.
-Mr. Ajit Dharmik, CEO, 6Simplex Software Solution
+**Dr. Smita Nirkhi** Associate Professor, AI Dept. <br>
+**Mr. Ajit Dharmik** CEO, 6Simplex Software Solution
 
 ---
 
